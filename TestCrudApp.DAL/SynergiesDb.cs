@@ -53,32 +53,7 @@ namespace TestCrudApp.DAL
             }
         }
 
-        public static string AddEmployee(Employee newEmployee)
-        {
-            using (MySqlCommand command = new("sp_maintain_employee", connection))
-            {
-                try
-                {
-                    connection.Open();
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@v_id", 0);
-                    command.Parameters.AddWithValue("@v_name", newEmployee.EmployeeName);
-                    command.Parameters.AddWithValue("@v_age", newEmployee.EmployeeAge);
-                    command.Parameters.AddWithValue("@v_phone", newEmployee.EmployeePhone);
-                    command.Parameters.AddWithValue("@v_action", "CREATE");
-                    command.Parameters["@v_action"].Direction = ParameterDirection.InputOutput;
-                    command.ExecuteNonQuery();
-                    connection.Close();
-                    return command.Parameters["@v_action"].Value.ToString();
-                }
-                catch (MySqlException)
-                {
-                    throw;
-                }
-            }
-        }
-
-        public static string UpdateEmployee(Employee employee)
+        public static string MaintainEmployee(Employee employee, SynergiesDbActions action)
         {
             using (MySqlCommand command = new("sp_maintain_employee", connection))
             {
@@ -88,30 +63,19 @@ namespace TestCrudApp.DAL
                 command.Parameters.AddWithValue("@v_name", employee.EmployeeName);
                 command.Parameters.AddWithValue("@v_age", employee.EmployeeAge);
                 command.Parameters.AddWithValue("@v_phone", employee.EmployeePhone);
-                command.Parameters.AddWithValue("@v_action", "UPDATE");
+                command.Parameters.AddWithValue("@v_action", action.ToString());
                 command.Parameters["@v_action"].Direction = ParameterDirection.InputOutput;
                 command.ExecuteNonQuery();
                 connection.Close();
                 return command.Parameters["@v_action"].Value.ToString();
             }
         }
+    }
 
-        public static string DeleteEmployee(Employee employee)
-        {
-            using (MySqlCommand command = new("sp_maintain_employee", connection))
-            {
-                connection.Open();
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@v_id", employee.Id);
-                command.Parameters.AddWithValue("@v_name", employee.EmployeeName);
-                command.Parameters.AddWithValue("@v_age", employee.EmployeeAge);
-                command.Parameters.AddWithValue("@v_phone", employee.EmployeePhone);
-                command.Parameters.AddWithValue("@v_action", "DELETE");
-                command.Parameters["@v_action"].Direction = ParameterDirection.InputOutput;
-                command.ExecuteNonQuery();
-                connection.Close();
-                return command.Parameters["@v_action"].Value.ToString();
-            }
-        }
+    public enum SynergiesDbActions
+    {
+        CREATE,
+        UPDATE,
+        DELETE
     }
 }

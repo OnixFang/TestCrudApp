@@ -19,19 +19,19 @@ namespace TestCrudApp.BLL
         public static string AddEmployee(string name, int age, string phone)
         {
             Employee newEmployee = new(name, age, phone);
-            return SynergiesDb.AddEmployee(newEmployee);
+            return SynergiesDb.MaintainEmployee(newEmployee, SynergiesDbActions.CREATE);
         }
 
         public static string UpdateEmployee(int id, string name, int age, string phone)
         {
             Employee employee = new(id, name, age, phone);
-            return SynergiesDb.UpdateEmployee(employee);
+            return SynergiesDb.MaintainEmployee(employee, SynergiesDbActions.UPDATE);
         }
 
         public static string DeleteEmployee(int id, string name, int age, string phone)
         {
             Employee employee = new(id, name, age, phone);
-            return SynergiesDb.DeleteEmployee(employee);
+            return SynergiesDb.MaintainEmployee(employee, SynergiesDbActions.DELETE);
         }
     }
 }
