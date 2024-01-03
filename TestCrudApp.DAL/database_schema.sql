@@ -36,13 +36,16 @@ BEGIN
 	IF (v_action = 'CREATE') THEN
 		INSERT INTO employees (employee_name, employee_age, employee_phone)
         VALUES (v_name, v_age, v_phone);
+		SET v_action = CONCAT('Created employee with ID: ', LAST_INSERT_ID());
 	ELSEIF (v_action = 'UPDATE') THEN
 		UPDATE employees
         SET employee_name = v_name, employee_age = v_age, employee_phone = v_phone
         WHERE id = v_id;
+        SET v_action = CONCAT('Updated employee with ID: ', v_id);
 	ELSEIF (v_action = 'DELETE') THEN
 		DELETE FROM employees
         WHERE id = v_id;
+        SET v_action = CONCAT('Deleted employee with ID: ', v_id);
 	END IF;
 END //
 DELIMITER ;
